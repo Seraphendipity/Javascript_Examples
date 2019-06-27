@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<head>
+    <style>
+        code {
+            color:blue
+        }
+    </style>
+</head>
+<body>
+    <h1>Elevator Saga</h1>
+    <p>The elevator game was incredibly fun (and frustrating) and quickly
+        absorbed quite a few hours of my life. After messing around with it for
+        a couple hours, I looked into elevator optimization in the real world and
+        found that the problem is NP-hard -- that is, a fully optimized elevator for
+        every situation is either impossible or incredibly dificult to create. That said, I
+        did find some resources on modern algorithms used, such as the Sector method (
+        different elevators cover different floors) as well as the Elevator Algorithm 
+        (the elevator keeps in one direction as long as there are passengers in that direction
+        or wanting to go in that direction until it reaches a stop).<br/>
+        I did not get too far, although I did learn a good bit on using Javascript arrays and
+        event-based programming. Here are some of my scripts with a bit of analysis:
+    </p>
+    <section><h3>Default</h3>
+        <p>
+            Here is my first "script", which as you can see is merely the default
+            code with the second floor added. Including here to show the "base" model.
+        </p>
+    <pre><code>
+        { // C1_V1 -- 52s
+            init: function(elevators, floors) {
+                var elevator = elevators[0]; // Let's use the first elevator
+        
+                // Whenever the elevator is idle (has no more queued destinations) ...
+                elevator.on("idle", function() {
+                    // let's go to all the floors (or did we forget one?)
+                    elevator.goToFloor(0);
+                    elevator.goToFloor(1); 
+                    elevator.goToFloor(2); 
+                });
+            },
+            update: function(dt, elevators, floors) {
+                // We normally don't need to do anything here
+            }
+        }
+    </code></pre></section><section><h3>First Event-Driven Attempt</h3><p>
+        Crude attempt at level 1. Goes slower than the default solution and
+        is uglier, but here's sort of the "show my work" for the following.
+    </p><pre><code>
+        { // C1_V2 -- 55s
+            init: function(elevators, floors) {
+                var e = elevators[0]; // Let's use the first elevator
+                var f = floors;
+                // e.on("idle", function() {
+                //     e.goToFloor(0);
+                //     e.goToFloor(1); 
+                //     e.goToFloor(2); 
+                // });
+                e.on("floor_button_pressed", function(floor) {
+                    e.goToFloor(floor);
+                });
+                f[0].on("up_button_pressed", function() {
+                    e.goToFloor(0);
+                });
+                f[1].on("up_button_pressed", function() {
+                    e.goToFloor(1);
+                });
+                f[1].on("down_button_pressed", function() {
+                    e.goToFloor(1);
+                });
+                f[2].on("down_button_pressed", function() {
+                    e.goToFloor(2);
+                });
+        
+                // for(i=0; i &lt; f.length; i++) {
+                //     f[i].on("up_button_pressed:", function() {
+                //         e.goToFloor(f[i]);
+                //     });
+                //     f[i].on("down_button_pressed:", function() {
+                //         e.goToFloor(f[i]);
+                //     });
+                // }
+            },
+                update: function(dt, elevators, floors) {
+                    // We normally don't need to do anything here
+                }
+        }
+    </code></pre></section><section><h3>Event-Based Frame</h3><p>
+        This was my first "real" code. My goal was to create a frame for future
+        optimisations by creating a "request-based" elevator. Whereas the previous
+        elevator acted independently of any input, this one acts entirely on input.
+        Note that it isn't too "bright" and does not do much, indeed being slower than
+        the independent system, but it's still useful as a basis for more complex
+        scripts. Note also it uses console.log, a heaven-sent function compared
+        to the alerts I was using beforehand to debug.
+    </p><pre><code>
+        { // C2_V3 -- 59s -- good framework for further optimisation
+            init: function(elevators, floors) {
+                var e = elevators[0]; // Let's use the first elevator
+                var f = floors;
+        
+               e.on("floor_button_pressed", function(floor) {
+                   e.goToFloor(floor);
+                   console.log("Q+: " + floor + " e")
+                   console.log(e.destinationQueue);
+               });
+        
+                //FLOORS - goes to floor they want
+                f.forEach(function(fl) {
+                    var i = fl.floorNum();
+                    fl.on("up_button_pressed", function() {
+                        e.goToFloor(i);
+                        console.log("Q+: " + i + " fu");
+                    });
+                    fl.on("down_button_pressed", function() {
+                        e.goToFloor(i);
+                        console.log("Q+: " + i + " fd");
+                     });
+                });
+            }, update: function(dt, elevators, floors) {}
+        }
+    </code></pre></section><section><h3>Pseudo-Elevator Algorithm</h3><p>
+        This was my attempt at a pseudo-elevator algorithm. First, it's been
+        modified to work for any number of elevators using the lovely forEach function,
+        and secondly it attempts to pick up passengers that are on its same course/
+        direction. Also sort of sucked, usually failing even level 2 but somehow managed
+        a few successes. However, if I continue, I will likely build from this one.
+        </p><pre><code>
+        { // C3_V4 -- 59s -- Elevator Algorithm: goes in same dir
+            init: function(elevators, floors) {
+                elevators.forEach(function(e) {
+        
+                var floorMin = 0; var floorMax = floors.length-1;
+                e.on("floor_button_pressed", function(floor) {
+                   e.goToFloor(floor);
+                   console.log("Q+: " + floor + " e")
+                   console.log(e.destinationQueue);
+                });
+                e.on("passing_floor", function(floorNum, direction) {
+                   if(direction == e.destinationDirection || 
+                        e.destinationDirection == "stopped" ||
+                        floorNum == floorMax || floorNum == floorMin) {
+                        goToFloor(floorNum, true); //This stop is on the way, stop
+                    }
+                });
+        
+                //FLOORS - goes to floor they want
+                floors.forEach(function(fl) {
+                    var i = fl.floorNum();
+                    fl.on("up_button_pressed", function() {
+                        e.goToFloor(i);
+                        console.log("Q+: " + i + " fu");
+                    });
+                    fl.on("down_button_pressed", function() {
+                        e.goToFloor(i);
+                        console.log("Q+: " + i + " fd");
+                     });
+        
+                });
+            });
+            }, update: function(dt, elevators, floors) {}
+        }
+        
+    </code></pre></section><section><h3>KISS Algorithm</h3><p>
+        Based on <a href="https://github.com/magwo/elevatorsaga/wiki/A-naive-solution-that-works-up-to-%235">
+        this humorous solution</a>, I created a similar "independent" system that simply
+        moves the elevators floor-to-floor. And, to both my joy and anger, it beat out anything
+        else I created with events, getting to level 4 somewhat easily. It should work
+        on any n-size level and elevator building, is small and relatively efficient code-wise, and
+        thus could theoretically serve as some back-up or quick bootstrap code to 
+        elevators should their actual algorithms fail. This, by the way, is actually
+        <a href="https://www.popularmechanics.com/technology/infrastructure/a20986/the-hidden-science-of-elevators/">
+        how elevators actually somewhat worked back in the day.</a> With a few optimizations, such
+        as starting on different floors (implemented) and going to ground floors more often, it actually
+        isn't an awful solution -- KISS is Bliss (Keep It Simple Stupid). 
+        </p><pre><code>
+        { // 52s, 59s, 56s, 57s
+            init: function(elevators, floors) {
+                var i = 0;
+                elevators.forEach(function(elev) {
+                    elev.goToFloor(floors.length/elevators.length * i);i++;
+                    floors.forEach(function(fl) {
+                        elev.on("idle", function() {
+                            elev.goToFloor(fl.floorNum());
+                        });
+        
+                    });
+                });
+            },
+            update: function(dt, elevators, floors) {
+                // We normally don't need to do anything here
+            }
+        }
+    </code></pre></section>
+<p>
+    So what did we learn today? That I suck at algorithms. But we also learned
+    event-based scripting, JS arrays, and general playing around with Java. 
+    When I have more time, I plan to perhaps play with this more. It is a rabbit-hole of
+    optimisation, but I have paid $30 for a game called Factorio which has the same premise
+    of "refactor till youre good," albeit with a soundtrack, nice visuals, and multiplayer.
+</p>
+<br/>
+<br/>
+<nav>
+    <a href="./calculator.html">Main: Calculator Problem</a><br/>
+    <a href="./elevator.html">Bonus_01: Elevator Problem</a><br/>
+    <a href="./features.html">Bonus_02: Features Discussion</a><br/>
+    <a href="https://ieee-collabratec.ieee.org/app/home">IEEE Home</a>
+</nav>
+</body>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<head>
+    <script>
+        function addExample() {
+            $('#addLink').val();
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <input type="text" id="addLink" name="addLink" placeholder="www.w3schools.com" required></input>
+        <input type="number" name="addRating" id="addRating" min="0" max ="5" step="0.5" placeholder="3" required></input>
+        <input type="text" id="addComment" name="addComment" placeholder="I gave 3 because its w 3 schools, not 5 schools." required></input>
+        <input type="submit" id="addSubmit" name="addSubmit" onclick="addExample()">Add Link to Table</input>
+    </form>
+</body>
