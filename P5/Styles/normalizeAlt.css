@@ -1,0 +1,115 @@
+/* normalize.css */
+
+/* MAIN */
+body {
+    padding: 0;
+    margin: 0;
+    background-image: linear-gradient(to bottom right, rgb(36, 79, 75), rgb(162, 44, 83));
+    /* background-color: #202025; */
+    min-height: 100vh;
+    transition: background-color 1s;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: red;
+    opacity: 0.8;
+    padding: 0.1em;
+    transition: opacity 0.5s;
+} h1:hover,h2:hover,h3:hover,h4:hover,h5:hover,h6:hover {
+    opacity: 1;
+}
+p, li{
+    color: orange;
+    opacity: 0.8;
+    padding: 0.2em;
+    transition: opacity 0.5s;
+} p:hover, li:hover {
+    opacity: 1;
+}
+a {
+    text-decoration: none;
+    background-color:  rgba(230, 41, 82, 0.7);
+    /* background-image: linear-gradient(to bottom right, rgb(230, 41, 82, 0.5), rgb(250, 132, 21,0.5)); */
+    color: #ddd;
+    border-radius: 20%;
+    transition: color 0.5s, background-color 0.5s;
+} a:hover {
+    color: #222;
+    background-color:  rgba(21, 250, 189,0.7)
+    /* background-image: linear-gradient(to bottom right, rgb(230, 41, 82), rgb(21, 250, 189,0.5)); */
+    
+} a:active {
+    background-color:  rgba(132, 24, 47, 0.7);
+    
+} a:visited {
+    background-color:  rgba(132, 24, 47, 0.7);
+}a:hover {
+    color: #222;
+    background-color:  rgba(21, 250, 189,0.7);}
+
+/* NAVBAR MAIN */
+.navMain {
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 2em;
+    position: fixed;
+    top: 0;
+    background-image: linear-gradient(to right top,#444, #222);
+    opacity: 0.8;
+}
+
+nav.navMain a, .navMain button {
+    display: block;
+    width: 20%;
+    height: inherit;
+    float: left;
+    background-image: none;
+    background-color: inherit;
+    opacity: inherit;
+    text-decoration: none;
+    text-align: center;
+    top: 50%;
+    color: #DDD;
+    transition: background-color 1s;
+} .navMain>a:hover, .navMain button:hover{
+    background-color: #555;
+}
+
+.navMain button {
+    float: right;
+    padding: 0;
+}
+
+.breakHeader {
+    width: 100%;
+    height: 3em;
+}
+
+/* MAIN IMAGE */
+.indexImg {
+    z-index: 5;
+    display:block; 
+    float: right;
+    width: 40%;
+    border-radius: 7%;
+    border: 0.4em solid #555;
+    filter: invert(100%);
+    transition: filter 1s;
+} .indexImg:hover {
+    /* filter: grayscale(0%); */
+}
+
+.altP {
+    color: #222;
+}
+
+.altH {
+    color: #111;
+}
+
+.altBody {
+    /* background-image: linear-gradient(to left bottom, #DDD, #DDF); */
+    background-color: #CCCCC5;
+
+}

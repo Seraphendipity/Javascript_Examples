@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<head>
+    <link rel="stylesheet" type="text/css" href="../Styles/normalize.css"></link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../Scripts/common.js"></script>
+</head>
+<body><div class="main">
+    <article>
+        <header>
+            <h2>Creating a Foundation...</h2>
+            <p class="subtitle">Decribe how you built the site and accomplished the requirements.</p>
+            <date></date>
+        </header><p>
+            Any endeavor that hopes to even mildly succeed needs a strong foundation first. In web development,
+            we call that foundation HTML. HW1 focused on establishing a strong HTML grounding. While HTML can, at
+            the surface level, be easily added and edited to format text and images, it is best thought about in 
+            a semantic manner. HTML elements should have purpose and represent a meaningful structure to both 
+            humans and machines. As such, even when initially creating the HTML with no CSS, I created the HTML with
+            structure and flow in mind as opposed to styling and events -- these aspects of webpages should be left
+            exclusively to CSS and JS. 
+            Regarding the requirements, I created the files stated in the outline and gave them a brief structure
+            or at least mentally thought out their relative structure and then filled them in as needed.
+            Read more below on how I accomplished various requirements specifically.
+        </p>
+    </article>
+    <hr/>
+    <article>
+        <header>
+            <h2>CSS and JS: Adding Dynamacy</h2>
+            <p class="subtitle">Decribe how you changed the style of the page through CSS/JS.</p>
+            <date></date>
+        </header><p>
+            Due to creating the HTML with semantic purpose in-mind only and without regard to styling, the CSS is
+            easily modifiable and malleable. Any changes in the site aesthetic can, for the most part, be solved
+            entirely within the normalize.css file (if the project gros it may be necessary to seperate into more
+            focused CSS files, but for now one large file will suffice). Changing the page's themes and colors is
+            as simple as editing a few lines in said CSS file. 
+            In regards to the assignment on creating an alternate CSS file and page, I accomplished this in two manners.
+            One is the traditional, stated way: There is an "indexAlt.html" and "normalizeAlt.css" page, which are 
+            approximate clones of the index and normalize pages, though with some styling differences. Again, these
+            aesthetic differences are changed entirely with CSS. In my second approach, I used a tiny bit of Javascript
+            and JQuery to toggle CSS classes on and off elements. The elements have a default style via CSS, and the same
+            CSS file also handles additional classes that may exist should the "Theme" button be pressed. These other classes
+            are appended by the JS to the elements, thus superceding the default appearances and classes (when they have
+            the same specificty that is). Note that the JS only applies classes and does not directly change the CSS, and for
+            good reason: while possible, changing the CSS directly with JS affects the element.style in the HTML proper, hence
+            it will ALWAYS have a greater specificty than anything in the normalize.css, unless the !important modifier is used (which
+            is typically not a good habit to make as it reduces flexibility of the CSS). While this does not come up in most cases, 
+            there are some instances where this is undesirable: for instance, if I want the link color to change on hover in the
+            CSS file, if the JS sets the color of a tags, then a:hover will be overwritten due to lower specificty.
+            Anyhwo, along with a transition attribute in some CSS styles, the page switches themes easily. Additionally,
+            it's relatovely easy to manage, as all aesthetic changes to those elements (whether the default or alternate value) 
+            are easily made in the CSS file alone (though adding the theme change to other elements requires an extra line
+            in JS).
+        </p>
+    </article>
+    <hr/>
+    <article>
+        <header>
+            <h2>Extra Tags for Extra Uses</h2>
+            <p class="subtitle">Decribe three extra tags from the <a href="http://dgreenteach.org/interestingTags.html">given list</a>.</p>
+            <date></date>
+        </header>
+        <section>
+            <h3>audio</h3>
+            <p>
+                The audio tag, like the video tag, can be used to expectedly play a certain sound effect or music.
+                However, be careful with this: loud, obnoxious sounds can be annoying for all users, and most users
+                do not expect nor necessarily want your choice of songs playing when they are a few clicks away from their
+                own favorite music. Ask yourself: is this necessary? Will my users want this? Like ads or unnecessary videos,
+                excess media can drag out page load times, slow down the site, and be undesriable.
+            </p>
+        </section><section>
+            <h3>picture</h3>
+            <p>
+                The picture tag, for lack of a better expression, is similar to an upgraded img tag. It is capable
+                of storing multiple images, and thus sees use in responsive sites (to cycle through images based on
+                screen size) as well as site pciture slideshow scenarios. THe img tag is still usable, though, and even
+                used within the picture tag, acting as the default should a browser (ER HEM INTERNET EXPLORE COUGH COUGH)
+                not fully support the picture tag.
+            </p>
+        </section><section>
+            <h3>meter</h3>
+            <p>
+                The meter is a nice bar to show ratios and quantity. Think about YouTube's like-to-dislike ratio
+                meter that gives at a quick glance the general quality of video (according to the internet that is).
+                I have also seen this used in FBS systems, such as Priority Software, in various places: show how many
+                shops are active, how many hours you are allotted out of the day, etc. It can be used to take a few, perhaps
+                unwieldy numbers and display them in a quick and user-friendly manner. 
+            </p>
+        </section>
+    </article>
+
+</div></body>
