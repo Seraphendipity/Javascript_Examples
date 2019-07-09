@@ -90,27 +90,31 @@ function progressBar() {
     $(".formPercent").change(function() {
         var i = 0; 
         var name;
-        var elem = $(".formPercent");
-
         var vals = progressBar.values;
+        var elem = $(".formPercent");
         var currIndex = $(".formPercentContainer .formPercent").index(this);
-        console.log(currIndex, vals)
+        var min = parseInt($(this).attr("min"));
+        var max = parseInt($(this).attr("max"));
+
         //STEP_01: Get diff of old and new val.
-        var oldVal = vals[currIndex];
-        var newVal = $(this).val();
-        var diff = oldVal - newVal;
-            // alert(oldVal);       DEBUG
-            // alert(newVal);       DEBUG
-            //alert(diff);         
-        //STEP_03: Multiply diff and ratios to add back in.
+        var oldVal = vals[currIndex];       // alert(oldVal); //     DEBUG
+        var newVal = parseInt($(this).val());         // alert(newVal); //     DEBUG
+
+        //ERROR-CHECKING
+        if (newVal > max) {newVal = 100; $(elem.get(i)).val(newVal);}
+        if (newVal < min) {newVal = 0; $(elem.get(i)).val(newVal);}
+        var diff = oldVal - newVal;         // alert(diff);   //     DEBUG  
+            
+        //STEP_02: Multiply diff and ratios to add back in.
         var sum = 100 - oldVal;
         vals.forEach(function(val, i) {
             if(i != currIndex) {
             $(elem.get(i)).val(function(index, value) {
-                vals[i] += diff*(vals[i]/sum);
+                vals[i] += (sum !== 0 ? diff*(vals[i]/sum) : diff/(vals.length-1));
                 return(Math.round(vals[i]));
             }); } 
         });
+        // console.log(vals); //DEBUG
         vals[currIndex] = parseInt(newVal);
         progressBar.values = vals;
 

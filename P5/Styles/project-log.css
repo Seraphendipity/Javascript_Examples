@@ -40,23 +40,38 @@ h3, h4 {
 
 .progressBar .pAnalysisAndDesign {
     background-color: green;
-}
+} .formPercentContainer .pAnalysisAndDesign {
+    color: green;
+} 
+
 .progressBar .pCoding {
     background-color: red;
+} .formPercentContainer .pCoding {
+    color: red;
 }
+
 .progressBar .pTesting {
     background-color: purple;
+} .formPercentContainer .pTesting {
+    color: purple;
 }
+
 .progressBar .pMeeting {
     background-color: blue;
+} .formPercentContainer .pMeeting {
+    color: blue;
 }
+
 .progressBar .pOther {
     background-color: orange;
+} .formPercentContainer .pOther {
+    color: orange;
 }
 
-.formPercent:required:after {
-
-}
+/* :required::after {
+    content: " *";
+    color: red;
+} */
 
 @media print {
     div.centeredBox {
