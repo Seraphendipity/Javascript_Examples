@@ -8,6 +8,13 @@ function changeTheme() {
 
 // window.onload = onPageLoad();
 $(onPageLoad).ready( function() {
+    if( typeof progressBar.values == 'undefined' ) {
+        progressBar.values= [];
+        for(i=0; i < 5; i++) {
+            progressBar.values[i] = parseInt($($(".formPercentContainer").
+            children(".formPercent").get(i)).val());
+        }
+    }
     progressBar();
 }); // I love you.
 // This one little line of code. He's just here to make us happy.
@@ -81,35 +88,33 @@ function genFooter() {
 
 function progressBar() {
     $(".formPercent").change(function() {
-        var i = 0; var name; var sum = 0; var ratio;
-        var others = $(".formPercent").not($(this));
-        if( typeof progressBar.values == 'undefined' ) {
-            for(i=0; i < 5; i++) {
-                progressBar.values[i] = parseInt($($(others).get(i)).val());
-            }
-        }
+        var i = 0; 
+        var name;
+        var elem = $(".formPercent");
 
+        var vals = progressBar.values;
+        var currIndex = $(".formPercentContainer .formPercent").index(this);
+        console.log(currIndex, vals)
         //STEP_01: Get diff of old and new val.
-        others.forEach( function(other) {
-            sum += parseInt($(other).val());
-        });
-        alert(sum);
-        var oldVal = 100 - (sum);
+        var oldVal = vals[currIndex];
         var newVal = $(this).val();
-        var diff = newVal - oldVal;
-
-        //STEP_02: Get ratios of Others.
-        for(i=0; i < 4; i++) {
-            $(others.get(i)).val(function(index, val) {
-                val = parseInt(val);
-
-                return(alert(Math.round(val + val/sum)));
-            });   
-        }
-
+        var diff = oldVal - newVal;
+            // alert(oldVal);       DEBUG
+            // alert(newVal);       DEBUG
+            //alert(diff);         
         //STEP_03: Multiply diff and ratios to add back in.
+        var sum = 100 - oldVal;
+        vals.forEach(function(val, i) {
+            if(i != currIndex) {
+            $(elem.get(i)).val(function(index, value) {
+                vals[i] += diff*(vals[i]/sum);
+                return(Math.round(vals[i]));
+            }); } 
+        });
+        vals[currIndex] = parseInt(newVal);
+        progressBar.values = vals;
 
-
+        //STEP_03: Apply the new vals to the divs.
         for (i = 0; i < 5; i++) {
             name = $($(".formPercentContainer").children(".form").get(i)).attr("name");
             $(".progressBar ."+name).height($(".formPercentContainer input[name="+name+"]").val()+'%');

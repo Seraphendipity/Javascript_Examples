@@ -197,3 +197,13 @@ tr:hover {
     background-color: rgb(66, 191, 253, 0.3);
 }
 
+@media print {
+    nav.navMain {
+        display: none;
+    }
+
+    @page {
+        size: auto;
+        margin: 0;
+    }
+}

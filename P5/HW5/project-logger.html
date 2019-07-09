@@ -9,7 +9,7 @@
     <div class="centeredBox">
         <h2>Project Logger</h2>
         <p>Input data from your project session in order to save it.</p>
-        <form action="../Resources/project-logger-receipt.php" method="post" id="contactForm">
+        <form action="./project-log.php" method="post" id="project-log">
             <!--
             <h3>Name (First-Middle-Last)</h3>
             <input type="text" name="fName" class="form formText" ></input>
@@ -17,26 +17,26 @@
             <input type="text" name="lName" class="form formText" ></input>
             -->
             <h3>Blazer ID</h3>
-            <input type="email" name="BlazerID" class="form" placeholder="john316"></input>
+            <input type="text" name="BlazerID" class="form" placeholder="john316" required></input>
             <h3>Team Number (1-6)</h3>
-            <input type="number" name="TeamNumber" class="form" min="1" max="6" step="1" placeholder="5"></input>
+            <input type="number" name="TeamNumber" class="form" min="1" max="6" step="1" placeholder="5" required></input>
             <h3>Total Time (hrs)</h3>      
-            <input type="number" name="TeamNumber" class="form" step="0.1" placeholder="3.4"></input>
+            <input type="number" name="TotalTime" class="form" step="0.1" placeholder="3.4" required></input>
             <!-- <input type="text" name="subject"  class="form formEmail"></input> -->
             <h3></h3>      
             <fieldset>
                 <legend><h3>Time &percnt; of each Component of the Project</h3></legend>
                 <div class="formPercentContainer">
                     <h4>Analysis &amp; Design</h4>      
-                    <input type="number" name="pAnalysisAndDesign" class="form formPercent" min="0" max="100" step="1" value="20"></input>
+                    <input type="number" name="pAnalysisAndDesign" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
                     <h4>Coding</h4>      
-                    <input type="number" name="pCoding" class="form formPercent" min="0" max="100" step="1" value="20"></input>
+                    <input type="number" name="pCoding" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
                     <h4>Testing</h4>      
-                    <input type="number" name="pTesting" class="form formPercent" min="0" max="100" step="1" value="20"></input>
+                    <input type="number" name="pTesting" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
                     <h4>Meetings</h4>      
-                    <input type="number" name="pMeeting" class="form formPercent" min="0" max="100" step="1" value="20"></input>
+                    <input type="number" name="pMeeting" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
                     <h4>Other</h4>      
-                    <input type="number" name="pOther" class="form formPercent" min="0" max="100" step="1" value="20"></input>
+                    <input type="number" name="pOther" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
                 </div>
                 <div class="progressBar">
                     <div class="pAnalysisAndDesign">.</div>

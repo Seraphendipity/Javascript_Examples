@@ -8,6 +8,7 @@ div.centeredBox {
 fieldset {
     margin-bottom: 10px;
     height: 425px;
+    border-radius: 10px;
 }
 
 h3, h4 {
@@ -53,5 +54,15 @@ h3, h4 {
     background-color: orange;
 }
 
+.formPercent:required:after {
+
+}
+
+@media print {
+    div.centeredBox {
+        page-break-after: always;
+    }
+
+}
 
 
