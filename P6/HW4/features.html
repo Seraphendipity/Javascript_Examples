@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../Styles/normalize.css"></link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../Scripts/common.js"></script>
+</head>
+<body><div class="main">
+    <h1>IEEE Features Discussion</h1>
+    <section>
+        <h3>List of Some Features used on IEEE's Site</h3>
+        <ul>
+            <li>Manage Activity Feed Link Block - CSS :hover for that nice on hover lightup.</li>
+            <li>Activity Feed</li>
+            <li>Message Button on PC version opens a frame</li>
+            <li>Dynamically loaded content (combo of front-end code and back-end requests)</li>
+            <li>Sub-tab/Sub-pages in User Info</li>
+            <li>Uploading Files/Text/Pictures</li>
+            <li>Sidebar content/ads</li>
+            <li>Loading Button/Screen</li>
+        </ul>
+    </section>
+    <hr/>
+    <section>
+        <h3>Activity Feed</h3>
+        <p>
+            The feed given on the homepage. It is structured wtih HTML to create
+            neat section blocks, each with their own abilities. CSS is responsible for
+            the satisfying on hover effects, such as changing the color of the buttons to
+            indicate you are about to click it. The interesting stuff, though, is the backend.
+            Likely, PHP is used to generate each of these comment sections using a template and grabbing the
+            data from a RDBMS such as MySQL (or an equivalent) using SQL (or an equivalent). These
+            posts could be generated per user based on their communities -- the server can identify the user
+            perhaps based on front-end Javascript sending to the server via POST the credentials of the user.
+            Additional functionality is alsoprovided, most likely, by client-side JS, such as
+            the "show more" button. Additionally, content is not loaded all at once, but
+            rather some of it is loaded as the user scrolls, likely client-side JS making
+            specialized calls back to server and requesting new content which it then appends
+            to the body.
+        </p>
+    </section>
+    <section>
+        <h3>Responsive Web Design: Nav and Message Button</h3>
+        <p>
+            The page changes quite a bit at a certain threshold, allowing mobile users to not be crushed with
+            content while desktop users have all of their tools availiable. One example of this is the navbar. When
+            below the threshold (mobile/tablet view), the fixed head at the top consolidates into 3 objects from 9, with
+            one of those objects being an easily recognizable triple-line menu bar icon. The responsiveness of the page
+            is a result of several factors, but likely primarily from (1) Good, structured HTML, (2) Proper use of
+            CSS and media-queries, (3) a bit of Javascript. Regarding actually changing the page's layout, this is usually done
+            in CSS witha  media-query, which looks at the device's width and height and changes the CSS based on this. This carries a lot
+            of the weight of changing from mobile to web or vice versa, instead of relying on seperate pages or a lot Javascript to rearrange
+            elements. Server-side should play almost no role here -- Indeed, turn off your wifi connection and you should still be
+            able to see the page change shape. The content and structure remains the same, only the aesthetics and manner 
+            in which the user interacts with it adjusts (and this is already in the files, thus does not need to be pulled
+            from the server, instead just switching as needed). An element which may involve a bit more JS and code-logic are such things
+            as the quick message feature -- in the mobile version, the message button under the menu takes the user to another page, but in
+            the desktop version, it opens a mini-frame to do quick messaging tasks without switching the page. This also represents, most
+            likely, a mobile-first deisgn pattern: features were added as they expanded from the mobile design to the  PC design
+            to allow PC users greater options, instead of, say, the quick-message feature being implemented and then crammed into 
+            the mobile version somehow.
+        </p>
+    </section>
+
+    <br/>
+    <hr/>
+    <nav>
+        <a href="./calculator">Main: Calculator Problem</a><br/>
+        <a href="./elevator">Bonus_01: Elevator Problem</a><br/>
+        <a href="./features">Bonus_02: Features Discussion</a><br/>
+        <a href="https://ieee-collabratec.ieee.org/app/home">IEEE Home</a>
+    </nav>
+</div></body>

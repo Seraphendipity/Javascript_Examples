@@ -1,0 +1,56 @@
+<!DOCTYPE HTML></div></body>
+<head>
+    <link rel="stylesheet" type="text/css" href="../Styles/normalize.css"></link>
+    <link rel="stylesheet" type="text/css" href="../Styles/project-log.css"></link>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../Scripts/common.js"></script>
+    <script src="../Scripts/project-log.js"></script>
+</head>
+<body><div class="main">
+    <div class="centeredBox">
+        <h2>Project Logger</h2>
+        <p>Input data from your project session in order to save it. All fields are required unless denoted otherwise.</p>
+        <!--https://www.smashingmagazine.com/2009/07/web-form-validation-best-practices-and-tutorials/-->
+        <form action="./project-log.php" method="post" id="project-log" onsubmit="return postValidation()">
+            <!--
+            <h3>Name (First-Middle-Last)</h3>
+            <input type="text" name="fName" class="form formText" ></input>
+            <input type="text" name="mName" class="form formText" ></input>
+            <input type="text" name="lName" class="form formText" ></input>
+            -->
+            <h3>Blazer ID</h3>
+            <input type="text" name="BlazerID" class="form blID" placeholder="john316" required></input>
+            <h3>Team Number (1-6)</h3>
+            <input type="number" name="TeamNumber" class="form teamNum" min="1" max="6" step="1" placeholder="5" required></input>
+            <h3>Total Time (hrs)</h3>      
+            <input type="number" name="TotalTime" class="form time"  min="0" max="999999" step="0.1" placeholder="3.4" required></input>
+            <!-- <input type="text" name="subject"  class="form formEmail"></input> -->
+            <fieldset>
+                <legend><h3>Time &percnt; of each Component of the Project</h3></legend>
+                <div class="formPercentContainer">
+                    <h4>Analysis &amp; Design <i class="fas fa-circle pAnalysisAndDesign"></i> </h4>       
+                    <input type="number" name="pAnalysisAndDesign" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
+                    <h4>Coding <i class="fas fa-circle pCoding"></i> </h4>    
+                    <input type="number" name="pCoding" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
+                    <h4>Testing <i class="fas fa-circle pTesting"></i> </h4>          
+                    <input type="number" name="pTesting" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
+                    <h4>Meetings <i class="fas fa-circle pMeeting"></i> </h4>    
+                    <input type="number" name="pMeeting" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
+                    <h4>Other <i class="fas fa-circle pOther"></i> </h4>    
+                    <input type="number" name="pOther" class="form formPercent" min="0" max="100" step="1" value="20" required></input>
+                </div>
+                <div class="progressBar">
+                    <div class="pAnalysisAndDesign"></div>
+                    <div class="pCoding"></div>
+                    <div class="pTesting"></div>
+                    <div class="pMeeting"></div>
+                    <div class="pOther"></div>
+                </div>
+            </fieldset>
+            <input type="submit" class="formSubmit"></input>
+        </form>
+    </div>
+    
+    
+</div></body>
