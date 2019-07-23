@@ -2,8 +2,8 @@
 
 function db_connect($database) {
     $db_servername = "localhost";
-    $db_username = "admin";
-    $db_password = "potato";
+    $db_username = "root";
+    $db_password = "";
     $db_name = $database;
     $conn = new mysqli($db_servername, $db_username, $db_password, $db_name);
     if ($conn->connect_error) {
@@ -23,7 +23,7 @@ function db_createTable($database, $table, $colNames) {
         }
     }
     $conn = db_connect($database);
-    $sql = "CREATE TABLE {$table} ( 
+    $sql = "CREATE TABLE IF NOT EXISTS {$table} ( 
                 uid INT NOT NULL , 
                 {$listSQL}
                 PRIMARY KEY (uid) ,
@@ -34,6 +34,13 @@ function db_createTable($database, $table, $colNames) {
             ENGINE = InnoDB;";
     //var_dump($sql);
     //var_dump( $conn->query($sql) );
+    $conn->query($sql);
+    return(true);
+}
+
+function db_clearTable() {
+    $conn = db_connect($database);
+    $sql = "DELETE FROM {$table}";
     $conn->query($sql);
 }
 
@@ -76,12 +83,20 @@ function db_insertData($database, $table, $arrVals) {
     $sql->execute();
     // var_dump( $result );
 
-
     echo $conn->error;
-
 
     db_disconnect($conn);
     return(1);
+}
+
+function db_selectData($database, $table) {
+    $conn = db_connect($database);
+    $sql = "SELECT * FROM {$table};";
+    $result = $conn->query($sql);
+    while($row = $result->fetch_array()) {
+        $data[] = $row;
+    }
+    return $data;
 }
 
 function db_disconnect($conn) {

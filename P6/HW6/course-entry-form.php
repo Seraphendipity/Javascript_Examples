@@ -4,8 +4,9 @@
     <link rel="stylesheet" type="text/css" href="../Styles/project-log.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../Scripts/jquery-csv.js"></script>
     <script src="../Scripts/common.js"></script>
-    <script src="../Scripts/project-log.js"></script>
+    <script src="../Scripts/course-log.js"></script>
 </head>
 <body> <div class="main">
 <!-----------------------------------------------------------------------------
@@ -15,7 +16,7 @@ ____ ____ ____ _  _     _ _  _ ___  _  _ ___
 ------------------------------------------------------------------------------>
     <div class="centeredBox">
         <h1>Course Creation Form</h1>
-        <p>Create a course for the <a href='./course-listing'>course listing</a> 
+        <p>Create a course for the <a href='./course-display'>course listing</a> 
             page. All input fields are required unless specified otherwise.</p>
         <!--https://www.smashingmagazine.com/2009/07/web-form-validation-best-practices-and-tutorials/-->
         <form action="" method="post" id="project-log" onsubmit="return postValidation()">
@@ -72,8 +73,14 @@ ____ ____ ____ _  _     _ _  _ ___  _  _ ___
             </label>
 
             <label>
-                <input type="submit" class="formSubmit">
+                <input type="submit" name="submit" value="Add Course" class="formSubmit">
             </label>
+            <hr>
+            <fieldset>
+                <legend>Upload Course CSV File</legend>
+                <input type="file"  accept=".csv,.txt" value="Upload CSV" class="formSubmit uploadBtn">
+                <input type="submit" name="submit" value="Add Course(s)" class="formSubmit" disabled>
+            </fieldset>
         </form>
     </div>
     
@@ -91,6 +98,16 @@ ____ ____ ____ _  _     _  _ ____ _  _ ___  _    _ _  _ ____
 
 //INPUT_VALIDATION - https://www.w3schools.com/php/showphp.asp?filename=demo_form_validation_complete
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if ( $_POST['submitType'] == 'Add Course' ) {
+        if (validateCourse($_POST, $arrVals)) else {
+            postCourse($)
+        }
+    } else if ( $_POST['submitType'] == 'Add Course(s)' ) {
+        
+    }
+
+function validateCourse($container, &$arrVals) {
     //var_dump($_POST); // DEBUG:
     $arrVals = [
         'semester'      =>  [$semester = '',     'select',         [['sp', 'su', 'fa'], false]                   ],
@@ -227,7 +244,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($arrVals as $name => &$value) {
         $valid = validate_get($name, $value[0]);
         // echo "<br><b>Returned Value: {$value[0]}</b><br>"; // DEBUG:
-
         if( $valid === 1 ) {
             $valid = validate_apply($value[0], $value[1], $value[2]);
             if( $valid === 1 ) {
@@ -240,18 +256,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    //SQL Input
     if( !($valid === 1) ) {
         echo $valid;
-    } else {     
-        require 'db_connect.php';
-        //restartCourses();
+    } else { return($arrVals); }
+}
 
-        $sqlResult = db_insertData('test','courses', $arrVals);
-        if (!($sqlResult == 1)) {
-            echo "Error in Processing SQL Request - ".$sqlResult.'|'.$conn->connect_error;
-        }
+function postCourse($arrVals) {
+
+    require 'db_connect.php';
+    //restartCourses();
+    $db = 'test';
+    $table = 'courses';
+    //Checks if table exists and creates if not, then inserts data
+    db_createTable( $db, $table, array_keys($arrVals) ); 
+    $sqlResult = db_insertData('test','courses', $arrVals);
+    if (!($sqlResult == 1)) {
+        echo "Error in Processing SQL Request - ".$sqlResult.'|'.$conn->connect_error;
     }
+}
+
 }
 ?>
 </p></div>

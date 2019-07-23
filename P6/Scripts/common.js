@@ -70,6 +70,7 @@ function genNavBar() {
         <div class="secondaryLink">
             <a href="../HW6/course-entry-form.php"><div>Course Entry Form</div></a>
             <a href="../HW6/course-display.php"><div>Course Display</div></a>
+            <a href="../HW6/db-control.php"><div>DB Control</div></a>
         </div>
     </div>
     <button onclick="changeTheme()">Theme</button>
