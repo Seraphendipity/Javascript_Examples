@@ -60,6 +60,11 @@ label {
     margin: 20px 0 2px;
 } 
 
+.errorBox {
+    background-color: rgba(204, 204, 204, 0.377);
+    border-radius: 20px;
+}
+
 /*________________________________________
 _  _ ____ _  _ 
 |\ | |__| |  | 

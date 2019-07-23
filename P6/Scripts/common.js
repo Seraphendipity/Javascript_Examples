@@ -65,6 +65,13 @@ function genNavBar() {
             <a href="../HW5/project-log-all.php"><div>Project Log</div></a>
         </div>
     </div>
+    <div class="primaryLink">
+        <a href="../HW6/hw6"><div>HW_06</div></a>
+        <div class="secondaryLink">
+            <a href="../HW6/course-entry-form.php"><div>Course Entry Form</div></a>
+            <a href="../HW6/course-display.php"><div>Course Display</div></a>
+        </div>
+    </div>
     <button onclick="changeTheme()">Theme</button>
     </nav>
     <div class="breakHeader"></div>
