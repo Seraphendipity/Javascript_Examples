@@ -214,6 +214,19 @@ tr:hover {
     margin: 2px;
 }
 
+.log {
+    color: #DDD;
+    opacity: 0.8;
+}
+
+.logLevel_valid {
+    color: green;
+}
+
+.logLevel_error {
+    color: red;
+}
+
 
 @media print {
     nav.navMain {

@@ -103,6 +103,27 @@ function db_disconnect($conn) {
     $conn->close();
 }
 
+function fileUploadToArray($name) {
+    // Takes the $_FILES super global and converts the given filename to an array.
+    // https://stackoverflow.com/questions/5593473/how-to-upload-and-parse-a-csv-file-in-php
+    // https://www.php.net/manual/en/function.fgetcsv.php
+    // https://www.php.net/manual/en/features.file-upload.php 
+    try {
+        if( (isset($_FILES[$name]['name'])) && ($_FILES[$name]['type'] == '.csv') ) {
+            //No Error, Proceed
+            if ( ($file = fopen($_FILES[$name]['name'], 'r')) !== false ) {
+                return (fgetcsv($file));
+            } else {
+                throw exception new FileOpenException($_FILES[$name]['name']);
+            }
+        } else {
+            throw exception new FileUploadException('.csv', $_FILES[$name]['type'], true, 'error');
+        }
+    }  catch (Exception $e) {
+        // Msg stated, back out.
+        return false;
+    }
+}
 
 
 

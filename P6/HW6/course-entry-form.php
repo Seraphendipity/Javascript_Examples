@@ -19,7 +19,7 @@ ____ ____ ____ _  _     _ _  _ ___  _  _ ___
         <p>Create a course for the <a href='./course-display'>course listing</a> 
             page. All input fields are required unless specified otherwise.</p>
         <!--https://www.smashingmagazine.com/2009/07/web-form-validation-best-practices-and-tutorials/-->
-        <form action="" method="post" id="project-log" onsubmit="return postValidation()">
+        <form action="" method="post" enctype="multipart/form-data" id="project-log" onsubmit="return postValidation()">
             <!--
             <h3>Name (First-Middle-Last)</h3>
             <input type="text" name="fName" class="form formText" ></input>
@@ -78,7 +78,7 @@ ____ ____ ____ _  _     _ _  _ ___  _  _ ___
             <hr>
             <fieldset>
                 <legend>Upload Course CSV File</legend>
-                <input type="file"  accept=".csv,.txt" value="Upload CSV" class="formSubmit uploadBtn">
+                <input type="file"  name="uploadFile" accept=".csv,.txt" value="Upload CSV" class="formSubmit uploadBtn">
                 <input type="submit" name="submit" value="Add Course(s)" class="formSubmit" disabled>
             </fieldset>
         </form>
@@ -104,7 +104,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             postCourse($)
         }
     } else if ( $_POST['submitType'] == 'Add Course(s)' ) {
-        
+        if( fileUpload($_FILES["uploadFile"]["tmp_name"]) == false) {
+            
+        }
     }
 
 function validateCourse($container, &$arrVals) {
