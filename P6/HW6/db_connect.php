@@ -7,7 +7,8 @@ function db_connect($database) {
     $db_name = $database;
     $conn = new mysqli($db_servername, $db_username, $db_password, $db_name);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        throw new DatabaseConnectionException($conn->error);
+        //die("Connection failed: " . $conn->connect_error);
     }  return  $conn;
 }
 
@@ -52,8 +53,6 @@ function db_dropTable($database, $table) {
 
 function db_insertData($database, $table, $arrVals) {
 
-    $conn = db_connect($database);
-
     $names = ''; $qmarks = ''; $types = ''; $values = []; $bFirst = true; $i = 0;
 
     foreach($arrVals as $name => $value) {
@@ -72,21 +71,25 @@ function db_insertData($database, $table, $arrVals) {
             $values[$i] = $value[0];
         } $i++;
     }
-        // DEBUG:
-        // var_dump($names);
-        // var_dump(...$values);
-        // var_dump($qmarks);
-        // var_dump($types);
-
-    $sql = $conn->prepare("INSERT INTO {$table} ({$names}) VALUES ({$qmarks})");
-    $sql->bind_param("{$types}", ...$values); //Arguement Unpacking
-    $sql->execute();
+        
+    log::debugDump( $names );
+    //log::debugDump( ...$values );
+    log::debugDump( $qmarks );
+    log::debugDump( $types );
+        $conn = db_connect($database);
+        
+        $sql = $conn->prepare("INSERT INTO {$table} ({$names}) VALUES ({$qmarks})");
+        $sql->bind_param("{$types}", ...$values); //Arguement Unpacking
+    try {
+        if( $sql->execute() === false) {
+            throw new DatabaseInsertException($conn->error);
+        } 
+    } finally {
+        db_disconnect($conn);
+    }
     // var_dump( $result );
-
-    echo $conn->error;
-
-    db_disconnect($conn);
-    return(1);
+    // echo $conn->error;
+    return;
 }
 
 function db_selectData($database, $table) {
@@ -114,10 +117,10 @@ function fileUploadToArray($name) {
             if ( ($file = fopen($_FILES[$name]['name'], 'r')) !== false ) {
                 return (fgetcsv($file));
             } else {
-                throw exception new FileOpenException($_FILES[$name]['name']);
+                throw new FileOpenException($_FILES[$name]['name']);
             }
         } else {
-            throw exception new FileUploadException('.csv', $_FILES[$name]['type'], true, 'error');
+            throw new FileUploadException('.csv', $_FILES[$name]['type'], true, 'error');
         }
     }  catch (Exception $e) {
         // Msg stated, back out.
@@ -126,23 +129,4 @@ function fileUploadToArray($name) {
 }
 
 
-
-
-function restartCourses () {
-    //DEBUG:
-    $courseNames = [
-        'semester',
-        'course',
-        'title',
-        'days',
-        'timeStart',
-        'timeEnd',
-        'instructor',
-        'location',
-        'enrolledAct',
-        'enrolledMax'
-    ];
-    db_dropTable('test', 'courses');
-    db_createTable('test', 'courses', $courseNames);
-}
 ?>

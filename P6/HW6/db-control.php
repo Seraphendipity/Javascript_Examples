@@ -25,6 +25,7 @@
             <li>DROP - drops the table completly, erasing all data and columns.</li>
             <li>CLEAR - deletes the data from the table, leaving columns/structure/ID.</li>
             <li>RESET - DROP then CREATE.</li>
+            <li>STANDARD - RESETS with standard course names list, as used by this web app.</li>
         </ul>
     <form action="" method="POST" class="searchBar">
         <fieldset> 
@@ -47,6 +48,7 @@
                 <option value="drop">Drop</option>
                 <option value="clear">Clear Data</option>
                 <option value="reset">Reset</option>
+                <option value="standard">Standard</option>
             </select>
             <input type="submit" value="Process SQL Request">
         </fieldset> 
@@ -77,6 +79,10 @@
             case 'reset':
                 db_dropTable($dbName, $tableName);
                 db_createTable($dbName, $tableName, $colNames);
+                break;
+            case 'standard':
+                require 'course-functions.php';
+                restartCourses();
                 break;
             default: 
                 echo "ERROR - Sorting: Unknown parameter to sort by.";

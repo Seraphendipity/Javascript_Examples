@@ -219,7 +219,7 @@ tr:hover {
     opacity: 0.8;
 }
 
-.logLevel_valid {
+.logLevel_valid, .logLevel_success {
     color: green;
 }
 
