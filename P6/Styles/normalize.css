@@ -220,13 +220,16 @@ tr:hover {
 }
 
 .logLevel_valid, .logLevel_success {
-    color: green;
+    color: rgb(114, 206, 114);
 }
 
 .logLevel_error {
-    color: red;
+    color: rgb(255, 72, 72);
 }
 
+.logLevel_debug {
+    color: rgb(131, 131, 255);
+}
 
 @media print {
     nav.navMain {

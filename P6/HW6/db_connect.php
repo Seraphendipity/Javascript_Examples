@@ -25,7 +25,7 @@ function db_createTable($database, $table, $colNames) {
     }
     $conn = db_connect($database);
     $sql = "CREATE TABLE IF NOT EXISTS {$table} ( 
-                uid INT NOT NULL , 
+                uid INT AUTO_INCREMENT, 
                 {$listSQL}
                 PRIMARY KEY (uid) ,
                 CONSTRAINT uniqueCols UNIQUE NONCLUSTERED (
@@ -51,35 +51,35 @@ function db_dropTable($database, $table) {
     $conn->query($sql);
 }
 
-function db_insertData($database, $table, $arrVals) {
-
-    $names = ''; $qmarks = ''; $types = ''; $values = []; $bFirst = true; $i = 0;
-
-    foreach($arrVals as $name => $value) {
+function db_insertData($database, $table, $namesArr, $arrVals) {
+    $qmarks = ''; $types = ''; $values = []; $bFirst = true; $i = 0;
+    $names = implode(',', $namesArr);
+    foreach($arrVals as $j => $value) {
         if (!$bFirst) {
-            $names .= ', ';
             $qmarks .= ', ';
         } else {$bFirst = false;}
-        $names .= $name;    
         $qmarks .= '?';
         $types .= 's';
             //if( gettype($value[0]) == 'integer' ) {$types .= 'i';} else {}
 
-        if ( gettype($value[0]) == 'array' ) {
-            $values[$i] = implode('', $value[0]);
+        if ( gettype($value) == 'array' ) {
+            $values[$i] = implode('', $value);
         } else { 
-            $values[$i] = $value[0];
+            $values[$i] = $value;
         } $i++;
     }
         
     log::debugDump( $names );
-    //log::debugDump( ...$values );
+    log::debugDump( $arrVals );
+    log::debugDump( $values );
     log::debugDump( $qmarks );
     log::debugDump( $types );
         $conn = db_connect($database);
         
         $sql = $conn->prepare("INSERT INTO {$table} ({$names}) VALUES ({$qmarks})");
-        $sql->bind_param("{$types}", ...$values); //Arguement Unpacking
+        if($sql === false) {throw new DatabaseInsertException($conn->error);} else{
+            $sql->bind_param("{$types}", ...$values); //Arguement Unpacking
+        }
     try {
         if( $sql->execute() === false) {
             throw new DatabaseInsertException($conn->error);

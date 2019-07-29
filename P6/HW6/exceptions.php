@@ -65,7 +65,8 @@
     // of any data and can use that in these scripts, no need to redefine constr.
     // VALIDATION EXCEPTIONS --------------------------------------------------------
         class ValidationException extends cException {};
-        class ValidationEmptyException extends cException {};
+        class ValidationEmptyException extends ValidationException {};
+        class ValidationUnknownMethodException extends ValidationException {};
         
         class ValidationSelectionNonoptionException extends ValidationException{};
         class ValidationSelectionNonmultiException extends ValidationException{};
@@ -88,8 +89,8 @@
         
 
         class DatabaseException extends Exception {};
-        class DatabaseConnectionException extends Exception {};
-        class DatabaseInsertException extends Exception {};
+        class DatabaseConnectionException extends DatabaseException {};
+        class DatabaseInsertException extends DatabaseException {};
         
 
     //-------------------------------------------------------------------------
@@ -128,12 +129,8 @@
         private static function loggerDump ($var) {
             $argv = func_get_args();
             $bShow = isset($argv[1]) ? $argv[1] : self::$bLogger;
-            $modifier = $argv[2] ? $argv[2] : '';
-            if(trim($modifier) !== '') {
-                // User can still bypass with intermediary whitespace, but
-                // preg_match('/\s/', $modifier) is too expensive for each and every log
-                $modClass = ' LogLevel_'.$modifier;
-            }
+            $modifier = isset($argv[2]) ? $argv[2] : '';
+            $modClass = ' logLevel_'.$modifier;
 
             // Sort of a var_export(), but better.
             ob_start();
@@ -141,18 +138,22 @@
             $msg = ob_get_clean();
 
             self::logToFile($msg);
-            if ($bShow) { var_dump($var); } 
+            if ($bShow) { 
+                echo '<span class="Log'.$modClass.'"><br>';
+                echo $msg;
+                echo '<br></span>';
+            } 
         }
 
         public static function debug($msg) {
             $argv = func_get_args();
-            $modifier = isset($argv[1]) ? $argv[1] : '';
+            $modifier = isset($argv[1]) ? $argv[1] : 'debug';
             self::logger($msg, self::$bDebug, $modifier);
         }
         
         public static function debugDump($msg) {
             $argv = func_get_args();
-            $modifier = isset($argv[1]) ? $argv[1] : '';
+            $modifier = isset($argv[1]) ? $argv[1] : 'debug';
             self::loggerDump($msg, self::$bDebug, $modifier);
         }
         
@@ -160,6 +161,30 @@
             $argv = func_get_args();
             $modifier = isset($argv[1]) ? $argv[1] : '';
             self::logger($msg, self::$bInfo, $modifier);
+        }
+
+        public static function displayTable($data, $mod = '', $bHead = true, $bFoot = true) {
+            if($bHead) {
+                $modClass = ($mod == '') ? '' : ' logLevel_'.$mod;
+                echo '<table class="log'.$modClass.'"><tr>';
+                foreach(array_keys($data) as $name) {
+                    echo '<th>'.$name.'</th>';
+                }
+                echo '</tr>';
+            }
+
+            echo '<tr>';
+            foreach($data as $name => $value) {
+                if(gettype($value) == 'array') {
+                    $value = implode('', $value);
+                }
+                echo '<td>'.$value.'</td>';
+            }
+            echo '</tr>';
+
+            if ($bFoot) {
+                echo '</table>';
+            }
         }
 
     }

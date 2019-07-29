@@ -56,7 +56,7 @@
 
     <?php 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        require 'db_connect.php';
+        require_once 'db_connect.php';
         $dbName = $_POST['database'];
         $tableName = $_POST['table'];
         $colNames = isset($_POST['colNames']) ? $_POST['colNames'] : [];
@@ -81,7 +81,7 @@
                 db_createTable($dbName, $tableName, $colNames);
                 break;
             case 'standard':
-                require 'course-functions.php';
+                require_once 'course-functions.php';
                 restartCourses();
                 break;
             default: 

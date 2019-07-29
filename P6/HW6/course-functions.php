@@ -24,6 +24,7 @@
             throw new ValidationEmptyException($name);
         } else {
             $value = clean_input($rawData[$name]);
+
         }
         return;
     }
@@ -103,7 +104,7 @@
         if( preg_match("/^[a-zA-Z0-9 ]*$/",$value) ) {
             //done
         } else {
-            throw new ValidateAlphanumException($value);
+            throw new ValidationAlphanumException($value);
         }
     }
 
@@ -112,7 +113,7 @@
             if(is_callable($method)) {
                 call_user_func($method, $dataRow[0], $dataRow[2]);
             } else {
-                throw new UnknownMethodException("Method ($method) does not exist.");
+                throw new ValidationUnknownMethodException("Method ($method) does not exist.");
             }
     }
 
@@ -120,64 +121,91 @@
     //INPUT_VALIDATION - https://www.w3schools.com/php/showphp.asp?filename=demo_form_validation_complete
 
     function validateCourse(array $rawData) {
+        
         //Raw Data is an associative array
         $data = [
             'semester'      =>  ['',  'select',         [['sp', 'su', 'fa'], false]                  ],
             'course'        =>  ['',  'alphanum',       []                                           ],
             'title'         =>  ['',  'alphanum',       []                                           ],
             'days'          =>  ['',  'select',         [['m', 't', 'w', 'r', 'f', 's', 'u'], true]  ],
-            'timeStart'     =>  ['',  'time',           ['00:00', '23:59', 'H:i a']                           ],
-            'timeEnd'       =>  ['',  'time',           ['00:00', '23:59', 'H:i a']                           ],
+            'timeStart'     =>  ['',  'time',           ['00:00', '23:59', 'H:i']                           ],
+            'timeEnd'       =>  ['',  'time',           ['00:00', '23:59', 'H:i']                           ],
             'instructor'    =>  ['',  'alphanum',       []                                           ],
             'location'      =>  ['',  'alphanum',       []                                           ], 
             'enrolledAct'   =>  ['',  'num',            [0, 99999]                                   ],
             'enrolledMax'   =>  ['',  'num',            [0, 99999]                                   ]
         ];
 
-        foreach ($data as $name => $row) {
+        foreach ($data as $name => &$row) {
             validate_get($name, $row[0], $rawData);
             validate_apply($row);
         }
+        return($data);
     }
 
 
-    function postCourse($data) {
+    function postCourse($names, $data) {
         require 'db_connect.php';
         //restartCourses();
         $db = 'test';
         $table = 'courses';
         //Checks if table exists and creates if not, then inserts data
         //db_createTable( $db, $table, array_keys($data) );  assume it's created
-        db_insertData('test','courses', $data);
+        db_insertData('test','courses', $names, $data);
         return;
     }
 
 
     function createCourse($data) {
         try {
-            validateCourse($data);
-            postCourse($data);
+            $mod = '';
+            require_once("exceptions.php");
+            $data = validateCourse($data);
+            postCourse(array_keys($data), array_column($data, 0));
             log::info("Successfully validated and posted course data.", 'success');
-            displayTable($data);
-        } catch (Exception $e) {
-            log::info("Data entry unsuccessful... ". 'error');
+            $mod = 'valid';
+        //} catch (Exception $e) {
+            //log::info("Data entry unsuccessful... ". 'error');
         } catch (DatabaseDuplicateException $e) {
-            log::info("Data already exists in database.", 'error');
-        } catch (DatabaseException $e) {
             log::info("Database problem, try again later or contact elirose@uab.edu.", 'error');
         } catch (ValidationException $e) {
-            log::info("Data is invalid: ");
+            log::info("Data is invalid: ", 'error');
+            throw $e;
+        } catch (ValidationAlphanumException $e) {
+            log::info("\"{$e->getMsg()}\" is not alphanumerical; only letters, numbers, and spaces allowed.", 'error');
+        } catch (ValidationDatetimeCreateException $e) {
+            log::info("\"{$e->getMsg()}\" is not in the \"valid HH:mm am/pm\" format", 'error');
+        } catch (ValidationAlphanumException $e) {
+            log::info("Data is invalid: ", 'error');
+        } catch (ValidationAlphanumException $e) {
+            log::info("Data is invalid: ", 'error');
+        } catch (ValidationException $e) {
+            log::info("Unknown validation error.", 'error');
+        } catch (DatabaseInsertException $e) {
+            log::info("Could not post data as data already exists
+            in the database.", 'error');
+        } catch (DatabaseException $e) {
+            log::info("Data already exists in database.", 'error');
         } catch (FileUploadTypeException $e) {
             //Invalid type
         } catch (FileUploadException $e) {
             //Could not upload
         } catch (FileException $e) {
             //Server-side, our problem, couldnt open
+        } catch (Exception $e) {
+            log::debugDump($e);
+        } finally {
+            $mod = ($mod=='') ? 'error' : $mod; 
+            foreach($data as $name => &$vals) {
+                $vals = $vals[0];
+            }
+            log::displayTable($data, $mod);
         }
         return;
     }
 
     function restartCourses () {
+        require_once('db_connect.php');
         //DEBUG:
         $courseNames = [
             'semester',
@@ -193,6 +221,7 @@
         ];
         db_dropTable('test', 'courses');
         db_createTable('test', 'courses', $courseNames);
+        return;
     }
 /*
     $semester = ''
